@@ -97,7 +97,8 @@ class Director {
     }
 }
 
-function clientCode(director: Director) {
+
+    const director = new Director();
     const builder = new ConcreteBuilder();
     director.setBuilder(builder);
 
@@ -118,7 +119,8 @@ function clientCode(director: Director) {
     builder.poor();
     builder.rich();
     builder.getProduct().showInventory();
-}
 
-const director = new Director();
-clientCode(director);
+
+
+
+

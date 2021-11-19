@@ -1,142 +1,62 @@
-/**
- * Интерфейс Абстрактной Фабрики объявляет набор методов, которые возвращают
- * различные абстрактные продукты. Эти продукты называются семейством и связаны
- * темой или концепцией высокого уровня. Продукты одного семейства обычно могут
- * взаимодействовать между собой. Семейство продуктов может иметь несколько
- * вариаций, но продукты одной вариации несовместимы с продуктами другой.
- */
- interface AbstractFactory {
-    SpawnPhysCreeps(): CreepPhysDam;
 
-    SpawnMagCreeps(): Magicians;
-}
-
-/**
- * Конкретная Фабрика производит семейство продуктов одной вариации. Фабрика
- * гарантирует совместимость полученных продуктов. Обратите внимание, что
- * сигнатуры методов Конкретной Фабрики возвращают абстрактный продукт, в то
- * время как внутри метода создается экземпляр конкретного продукта.
- */
-class Baracks implements AbstractFactory {
-    public SpawnPhysCreeps(): CreepPhysDam {
-        return new Swordsman();
-    }
-
-    public SpawnMagCreeps(): Magicians {
-        return new Magician();
+class BmwProducer {
+    delegation(type : string){
+        return type === "sport" ? new BmwSportFactory(): new BmwUsFactory();
     }
 }
 
-/**
- * Каждая Конкретная Фабрика имеет соответствующую вариацию продукта.
- */
-class Forest implements AbstractFactory {
-    public SpawnPhysCreeps(): CreepPhysDam {
-        return new ForestPhysCreep();
-    }
 
-    public SpawnMagCreeps(): Magicians {
-        return new ForestMagician();
-    }
-}
 
-/**
- * Каждый отдельный продукт семейства продуктов должен иметь базовый интерфейс.
- * Все вариации продукта должны реализовывать этот интерфейс.
- */
-interface CreepPhysDam {
-    health_points : number;
-    damage : number;
-    spawning(): string;
-    characteristic() : string;
-}
-
-/**
- * Эти Конкретные Продукты создаются соответствующими Конкретными Фабриками.
- */
-class Swordsman implements CreepPhysDam {
-    health_points : number = 50;
-    damage : number = 20;
-    public spawning(): string {
-        return "Swordsman have spawned\n";
-    }
-
-    public characteristic(): string {
-        return `HP = ${this.health_points}      Damage = ${this.damage}`;
+class BmwSportFactory{
+    create(model){
+        if(model === "m4"){
+            return new Bmw(model,200000,350);
+        }
+        if(model === "m3"){
+            return new Bmw(model,180000, 300);
+        }
     }
 }
 
-class ForestPhysCreep implements CreepPhysDam {
-    health_points : number = 100;
-    damage : number = 40;
-    public spawning(): string {
-        return "ForestPhys have spawned\n";
-    }
 
-    public characteristic(): string {
-        return `HP = ${this.health_points}      Damage = ${this.damage}`;
-    }
-}
-
-/**
- * Базовый интерфейс другого продукта. Все продукты могут взаимодействовать друг
- * с другом, но правильное взаимодействие возможно только между продуктами одной
- * и той же конкретной вариации.
- */
-interface Magicians {
-    health_points : number;
-    damage : number;
-    mana : number;
-    spawning(): string;
-    characteristic() : string;
-}
-
-/**
- * Эти Конкретные Продукты создаются соответствующими Конкретными Фабриками.
- */
-class Magician implements Magician {
-    health_points : number = 30;
-    damage : number = 45;
-    mana : number = 500;
-    public spawning(): string {
-        return 'Magician have spawned\n';
-    }
-
-    public characteristic(): string {
-        return `HP = ${this.health_points}      Mana = ${this.mana}     Damage = ${this.damage}`;
+class BmwUsFactory{
+    create(model){
+        if(model === "x5"){
+            return new Bmw(model,108000,180);
+        }
+        if(model === "x6"){
+            return new Bmw(model,111000, 200);
+        }
     }
 }
 
-class ForestMagician implements Magician {
-    health_points : number = 100;
-    damage : number = 80;
-    mana : number = 800;
-    public spawning(): string {
-        return 'ForestMagician have spawned\n';
+
+class Bmw {
+    model : string;
+    price : number;
+    maxSpeed : number;
+
+    constructor(model : string,price : number ,maxSpeed : number){
+        this.model = model;
+        this.price = price;
+        this.maxSpeed = maxSpeed; 
     }
 
-    public characteristic(): string {
-        return `HP = ${this.health_points}      Mana = ${this.mana}     Damage = ${this.damage}`;
+    show() : string{
+        return `${this.model} - ${this.price} - ${this.maxSpeed} `;
     }
 }
 
-/**
- * Клиентский код работает с фабриками и продуктами только через абстрактные
- * типы: Абстрактная Фабрика и Абстрактный Продукт. Это позволяет передавать
- * любой подкласс фабрики или продукта клиентскому коду, не нарушая его.
- */
-function clientCode(factory: AbstractFactory) {
-    const productA = factory.SpawnPhysCreeps();
-    const productB = factory.SpawnMagCreeps();
 
-    console.log(productA.spawning(),productA.characteristic());
-    console.log(productB.spawning(),productB.characteristic());
-}
 
-/**
- * Клиентский код может работать с любым конкретным классом фабрики.
- */
-clientCode(new Baracks());
+const producer = new BmwProducer();
 
-clientCode(new Forest());
+
+const sportCar =  producer.delegation("sport");
+const m4 = sportCar.create("m4");
+console.log(m4.show());
+
+const usCar = producer.delegation("city");
+const x6 =  usCar.create("x6");
+console.log(x6.show());
 

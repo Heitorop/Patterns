@@ -1,50 +1,29 @@
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = function (d, b) {
-        extendStatics = Object.setPrototypeOf ||
-            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
-        return extendStatics(d, b);
-    };
-    return function (d, b) {
-        if (typeof b !== "function" && b !== null)
-            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
-var Creator = /** @class */ (function () {
-    function Creator() {
+var BmwFactory = /** @class */ (function () {
+    function BmwFactory() {
     }
-    Creator.prototype.spawn = function () {
-        var typeOfCreep = this.factoryMethod();
-        return typeOfCreep.spawning() + " have spawned";
+    BmwFactory.prototype.create = function (type) {
+        if (type === "x5") {
+            return new Bmw(type, 108000, 300);
+        }
+        if (type === "x6") {
+            return new Bmw(type, 111000, 320);
+        }
     };
-    return Creator;
+    return BmwFactory;
 }());
-var Baracks = /** @class */ (function (_super) {
-    __extends(Baracks, _super);
-    function Baracks() {
-        return _super !== null && _super.apply(this, arguments) || this;
+var Bmw = /** @class */ (function () {
+    function Bmw(model, price, maxSpeed) {
+        this.model = model;
+        this.price = price;
+        this.maxSpeed = maxSpeed;
     }
-    Baracks.prototype.factoryMethod = function () {
-        return new SwordsmenMagician();
+    Bmw.prototype.show = function () {
+        return this.model + " - " + this.price + " - " + this.maxSpeed + " ";
     };
-    Baracks.prototype.spawn = function () {
-        var typeOfCreep = this.factoryMethod();
-        return typeOfCreep.spawning() + " have spawned";
-    };
-    return Baracks;
-}(Creator));
-var SwordsmenMagician = /** @class */ (function () {
-    function SwordsmenMagician() {
-    }
-    SwordsmenMagician.prototype.spawning = function () {
-        return 'Swordsmen and Magicians';
-    };
-    return SwordsmenMagician;
+    return Bmw;
 }());
-function Dota2(creator) {
-    console.log(creator.spawn());
-}
-Dota2(new Baracks());
+var factory = new BmwFactory();
+var x5 = factory.create("x5");
+console.log(x5.show());
+var x6 = factory.create("x6");
+console.log(x6.show());

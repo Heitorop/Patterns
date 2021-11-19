@@ -1,108 +1,52 @@
-/**
- * Конкретная Фабрика производит семейство продуктов одной вариации. Фабрика
- * гарантирует совместимость полученных продуктов. Обратите внимание, что
- * сигнатуры методов Конкретной Фабрики возвращают абстрактный продукт, в то
- * время как внутри метода создается экземпляр конкретного продукта.
- */
-var Baracks = /** @class */ (function () {
-    function Baracks() {
+var BmwProducer = /** @class */ (function () {
+    function BmwProducer() {
     }
-    Baracks.prototype.SpawnPhysCreeps = function () {
-        return new Swordsman();
+    BmwProducer.prototype.delegation = function (type) {
+        return type === "sport" ? new BmwSportFactory() : new BmwUsFactory();
     };
-    Baracks.prototype.SpawnMagCreeps = function () {
-        return new Magician();
-    };
-    return Baracks;
+    return BmwProducer;
 }());
-/**
- * Каждая Конкретная Фабрика имеет соответствующую вариацию продукта.
- */
-var Forest = /** @class */ (function () {
-    function Forest() {
+var BmwSportFactory = /** @class */ (function () {
+    function BmwSportFactory() {
     }
-    Forest.prototype.SpawnPhysCreeps = function () {
-        return new ForestPhysCreep();
+    BmwSportFactory.prototype.create = function (model) {
+        if (model === "m4") {
+            return new Bmw(model, 200000, 350);
+        }
+        if (model === "m3") {
+            return new Bmw(model, 180000, 300);
+        }
     };
-    Forest.prototype.SpawnMagCreeps = function () {
-        return new ForestMagician();
-    };
-    return Forest;
+    return BmwSportFactory;
 }());
-/**
- * Эти Конкретные Продукты создаются соответствующими Конкретными Фабриками.
- */
-var Swordsman = /** @class */ (function () {
-    function Swordsman() {
-        this.health_points = 50;
-        this.damage = 20;
+var BmwUsFactory = /** @class */ (function () {
+    function BmwUsFactory() {
     }
-    Swordsman.prototype.spawning = function () {
-        return "Swordsman have spawned\n";
+    BmwUsFactory.prototype.create = function (model) {
+        if (model === "x5") {
+            return new Bmw(model, 108000, 180);
+        }
+        if (model === "x6") {
+            return new Bmw(model, 111000, 200);
+        }
     };
-    Swordsman.prototype.characteristic = function () {
-        return "HP = " + this.health_points + "      Damage = " + this.damage;
-    };
-    return Swordsman;
+    return BmwUsFactory;
 }());
-var ForestPhysCreep = /** @class */ (function () {
-    function ForestPhysCreep() {
-        this.health_points = 100;
-        this.damage = 40;
+var Bmw = /** @class */ (function () {
+    function Bmw(model, price, maxSpeed) {
+        this.model = model;
+        this.price = price;
+        this.maxSpeed = maxSpeed;
     }
-    ForestPhysCreep.prototype.spawning = function () {
-        return "ForestPhys have spawned\n";
+    Bmw.prototype.show = function () {
+        return this.model + " - " + this.price + " - " + this.maxSpeed + " ";
     };
-    ForestPhysCreep.prototype.characteristic = function () {
-        return "HP = " + this.health_points + "      Damage = " + this.damage;
-    };
-    return ForestPhysCreep;
+    return Bmw;
 }());
-/**
- * Эти Конкретные Продукты создаются соответствующими Конкретными Фабриками.
- */
-var Magician = /** @class */ (function () {
-    function Magician() {
-        this.health_points = 30;
-        this.damage = 45;
-        this.mana = 500;
-    }
-    Magician.prototype.spawning = function () {
-        return 'Magician have spawned\n';
-    };
-    Magician.prototype.characteristic = function () {
-        return "HP = " + this.health_points + "      Mana = " + this.mana + "     Damage = " + this.damage;
-    };
-    return Magician;
-}());
-var ForestMagician = /** @class */ (function () {
-    function ForestMagician() {
-        this.health_points = 100;
-        this.damage = 80;
-        this.mana = 800;
-    }
-    ForestMagician.prototype.spawning = function () {
-        return 'ForestMagician have spawned\n';
-    };
-    ForestMagician.prototype.characteristic = function () {
-        return "HP = " + this.health_points + "      Mana = " + this.mana + "     Damage = " + this.damage;
-    };
-    return ForestMagician;
-}());
-/**
- * Клиентский код работает с фабриками и продуктами только через абстрактные
- * типы: Абстрактная Фабрика и Абстрактный Продукт. Это позволяет передавать
- * любой подкласс фабрики или продукта клиентскому коду, не нарушая его.
- */
-function clientCode(factory) {
-    var productA = factory.SpawnPhysCreeps();
-    var productB = factory.SpawnMagCreeps();
-    console.log(productA.spawning(), productA.characteristic());
-    console.log(productB.spawning(), productB.characteristic());
-}
-/**
- * Клиентский код может работать с любым конкретным классом фабрики.
- */
-clientCode(new Baracks());
-clientCode(new Forest());
-console.log(new Swordsman());
+var producer = new BmwProducer();
+var sportCar = producer.delegation("sport");
+var m4 = sportCar.create("m4");
+console.log(m4.show());
+var usCar = producer.delegation("city");
+var x6 = usCar.create("x6");
+console.log(x6.show());
