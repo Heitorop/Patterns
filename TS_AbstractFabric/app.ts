@@ -1,14 +1,12 @@
 
-class BmwProducer {
-    delegation(type : string){
-        return type === "sport" ? new BmwSportFactory(): new BmwUsFactory();
-    }
+interface  BmwProducer {
+    createSport() : Bmw;
+    createUsCar() : Bmw;
+
 }
 
-
-
-class BmwSportFactory{
-    create(model){
+class BmwFactory{
+    createSport(model) : Bmw{
         if(model === "m4"){
             return new Bmw(model,200000,350);
         }
@@ -16,11 +14,8 @@ class BmwSportFactory{
             return new Bmw(model,180000, 300);
         }
     }
-}
 
-
-class BmwUsFactory{
-    create(model){
+    createUsCar(model) : Bmw{
         if(model === "x5"){
             return new Bmw(model,108000,180);
         }
@@ -49,14 +44,11 @@ class Bmw {
 
 
 
-const producer = new BmwProducer();
+const producer = new BmwFactory();
 
+const sportCar =  producer.createSport("m4");
+console.log(sportCar.show());
 
-const sportCar =  producer.delegation("sport");
-const m4 = sportCar.create("m4");
-console.log(m4.show());
-
-const usCar = producer.delegation("city");
-const x6 =  usCar.create("x6");
-console.log(x6.show());
+const usCar = producer.createUsCar("x6");
+console.log(usCar.show());
 
