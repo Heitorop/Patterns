@@ -1,5 +1,6 @@
 interface Model{//реализация
     color:Color;
+    paint() : string;
 }
 
 class Color{//абстракция 
