@@ -51,3 +51,6 @@ class Bmw implements Model{
 
 const blackBmw = new Bmw(new BlackColor());
 console.log(blackBmw.paint());
+
+
+//////////перевернуть агреггацию 
