@@ -3,13 +3,13 @@ abstract class Builder{
         this.addEngine();
         this.installChassis()
         this.addElectronic();
-        this.CollectAccessories();
+        this.collectAccessories();
     }
 
     protected abstract addEngine() : void;
     protected abstract installChassis() : void;
     protected abstract addElectronic() : void;
-    protected abstract CollectAccessories() : void;
+    protected abstract collectAccessories() : void;
     
 }
 
@@ -23,7 +23,7 @@ class TeslaBuilder extends Builder{
     addElectronic() : void{
         console.log("Tesla Electronic");
     }
-    CollectAccessories() : void{
+    collectAccessories() : void{
         console.log("Tesla accessories");
     }
 }
@@ -39,7 +39,7 @@ class BmwBuilder extends Builder{
     addElectronic() : void{
         console.log("Bmw Electronic");
     }
-    CollectAccessories() : void{
+    collectAccessories() : void{
         console.log("Bmw accessories");
     }
 }
